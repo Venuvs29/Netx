@@ -1,0 +1,10 @@
+.home {
+    background: #141414;
+    min-height: 100vh;
+}
+
+.home__rows {
+    margin-top: -120px;
+    position: relative;
+    z-index: 2;
+}

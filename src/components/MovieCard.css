@@ -1,0 +1,116 @@
+.movie-card {
+    flex: 0 0 auto;
+    width: 185px;
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, z-index 0s;
+    position: relative;
+    z-index: 1;
+}
+
+.movie-card--large {
+    width: 150px;
+}
+
+.movie-card--hovered {
+    transform: scale(1.2);
+    z-index: 100;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
+}
+
+.movie-card__img-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+}
+
+.movie-card--large .movie-card__img-wrap {
+    aspect-ratio: 2/3;
+}
+
+.movie-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.movie-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    display: flex;
+    align-items: flex-end;
+}
+
+.movie-card--hovered .movie-card__overlay {
+    opacity: 1;
+}
+
+.movie-card__info {
+    padding: 10px;
+    width: 100%;
+}
+
+.movie-card__title {
+    margin: 0 0 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.movie-card__meta {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.movie-card__year,
+.movie-card__rating {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.movie-card__actions {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.movie-card__play,
+.movie-card__add,
+.movie-card__like {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.movie-card__play {
+    background: #fff;
+    color: #000;
+    border-color: #fff;
+}
+
+.movie-card__play:hover {
+    background: rgba(255, 255, 255, 0.85);
+}
+
+.movie-card__add:hover,
+.movie-card__like:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
