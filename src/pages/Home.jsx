@@ -34,41 +34,50 @@ const Home = () => {
     useEffect(() => {
         const fetchAll = async () => {
             try {
+                const safeGet = async (fn) => {
+                    try {
+                        const res = await fn();
+                        return res?.data?.results || [];
+                    } catch {
+                        return [];
+                    }
+                };
+
                 const [
-                    netflixRes,
-                    trendingRes,
-                    topRatedRes,
-                    actionRes,
-                    comedyRes,
-                    horrorRes,
-                    romanceRes,
-                    docsRes,
-                    upcomingRes,
-                    animatedRes,
+                    netflixOriginals,
+                    trending,
+                    topRated,
+                    action,
+                    comedy,
+                    horror,
+                    romance,
+                    documentaries,
+                    upcoming,
+                    animated,
                 ] = await Promise.all([
-                    fetchNetflixOriginals(),
-                    fetchTrending(),
-                    fetchTopRated(),
-                    fetchActionMovies(),
-                    fetchComedyMovies(),
-                    fetchHorrorMovies(),
-                    fetchRomanceMovies(),
-                    fetchDocumentaries(),
-                    fetchUpcoming(),
-                    fetchAnimated(),
+                    safeGet(fetchNetflixOriginals),
+                    safeGet(fetchTrending),
+                    safeGet(fetchTopRated),
+                    safeGet(fetchActionMovies),
+                    safeGet(fetchComedyMovies),
+                    safeGet(fetchHorrorMovies),
+                    safeGet(fetchRomanceMovies),
+                    safeGet(fetchDocumentaries),
+                    safeGet(fetchUpcoming),
+                    safeGet(fetchAnimated),
                 ]);
 
                 setData({
-                    netflixOriginals: netflixRes.data.results,
-                    trending: trendingRes.data.results,
-                    topRated: topRatedRes.data.results,
-                    action: actionRes.data.results,
-                    comedy: comedyRes.data.results,
-                    horror: horrorRes.data.results,
-                    romance: romanceRes.data.results,
-                    documentaries: docsRes.data.results,
-                    upcoming: upcomingRes.data.results,
-                    animated: animatedRes.data.results,
+                    netflixOriginals,
+                    trending,
+                    topRated,
+                    action,
+                    comedy,
+                    horror,
+                    romance,
+                    documentaries,
+                    upcoming,
+                    animated,
                 });
             } catch (err) {
                 console.error('Failed to fetch movie data:', err);
