@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -6,7 +8,12 @@ const Navbar = () => {
     const [activeTab, setActiveTab] = useState('Home');
     const [searchOpen, setSearchOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [profileOpen, setProfileOpen] = useState(false);
     const searchInputRef = useRef(null);
+    const profileRef = useRef(null);
+
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
 
     const tabs = ['Home', 'Series', 'Movies', 'New & Popular', 'My List', 'Browse by Languages'];
 
@@ -24,6 +31,17 @@ const Navbar = () => {
         }
     }, [searchOpen]);
 
+    // Close profile dropdown when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (profileRef.current && !profileRef.current.contains(e.target)) {
+                setProfileOpen(false);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
     const handleSearchToggle = () => {
         setSearchOpen(prev => !prev);
         if (searchOpen) setSearchQuery('');
@@ -31,6 +49,11 @@ const Navbar = () => {
 
     const handleSearchBlur = () => {
         if (!searchQuery) setSearchOpen(false);
+    };
+
+    const handleLogout = () => {
+        logout();
+        navigate('/signin');
     };
 
     return (
@@ -79,11 +102,33 @@ const Navbar = () => {
                         <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z" />
                     </svg>
                 </button>
-                <div className="navbar__avatar">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" alt="avatar" />
-                    <span className="navbar__caret">▾</span>
+
+                {/* Profile dropdown with user name and Sign Out */}
+                <div className="navbar__profile" ref={profileRef}>
+                    <div
+                        className="navbar__avatar"
+                        onClick={() => setProfileOpen(prev => !prev)}
+                        id="navbar-profile-toggle"
+                    >
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png" alt="avatar" />
+                        <span className="navbar__caret">{profileOpen ? '▴' : '▾'}</span>
+                    </div>
+                    {profileOpen && (
+                        <div className="navbar__dropdown">
+                            <div className="navbar__dropdown-user">
+                                👤 {user?.displayName || user?.email}
+                            </div>
+                            <hr className="navbar__dropdown-divider" />
+                            <button
+                                id="navbar-signout"
+                                className="navbar__dropdown-signout"
+                                onClick={handleLogout}
+                            >
+                                Sign out of NetX
+                            </button>
+                        </div>
+                    )}
                 </div>
-                <button className="navbar__signin">Sign In</button>
             </div>
         </nav>
     );
